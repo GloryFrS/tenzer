@@ -1,0 +1,16 @@
+.sidebar {
+  flex-basis: 40vw;
+  background: #252c48;
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+.sidebar_container {
+  padding: 1em;
+}
+.sidebar_button {
+  margin: 1em 0;
+}
+.sidebar_sort {
+  margin: 2em 0;
+}
