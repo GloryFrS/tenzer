@@ -3,3 +3,11 @@
   background: #1b203a;
   height: 100vh;
 }
+.main_buttons {
+  margin: 2em 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+.main_content {
+  padding: 0 3em;
+}

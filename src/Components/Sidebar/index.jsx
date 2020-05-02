@@ -1,25 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, SearchInput, NoteList } from '../'
 import './styles.css'
 
-export default () => {
-  const [notes, setNotes] = useState(localStorage.notes ? JSON.parse(localStorage.notes) : [])
-
-  const newNote = (data) => {
-    data = {
-      title: 'title',
-      description: 'description',
-      dateAdd: new Date()
-    }
-    setNotes(prevNotes => {
-      localStorage.setItem('notes', JSON.stringify([...prevNotes, data]))
-      return [
-        ...prevNotes,
-        data
-      ]
-    })
-  }
-
+export default ({
+  setActiveNote,
+  notes,
+  handleNewNote,
+  setNotes
+}) => {
   const handleSorting = (e) => {
     const sortingArray = notes.slice().sort((a, b) => {
       const dateA = new Date(a.dateAdd)
@@ -38,7 +26,7 @@ export default () => {
         <div className='sidebar_button'>
           <Button
             style={{ width: '100%' }}
-            onClick={() => newNote()}
+            onClick={() => handleNewNote()}
           >
             + заметка
           </Button>
@@ -53,7 +41,7 @@ export default () => {
             <option value='downSort'>убыванию даты</option>
           </select>
         </div>
-        <NoteList data={notes} />
+        <NoteList setActiveNote={setActiveNote} data={notes} />
       </div>
     </div>
   )
