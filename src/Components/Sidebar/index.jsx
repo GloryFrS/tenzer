@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Button, SearchInput, NoteList } from '../'
 import './styles.css'
 
 export default () => {
-  const initData = localStorage.notes ? JSON.parse(localStorage.notes) : []
-  const [notes, setNotes] = useState([
-    ...initData
-  ])
-
-  useEffect(() => {
-    (async () => {
-      localStorage.setItem('notes', JSON.stringify(notes))
-    })()
-  }, [notes])
+  const [notes, setNotes] = useState(localStorage.notes ? JSON.parse(localStorage.notes) : [])
 
   const newNote = (data) => {
     data = {
@@ -20,10 +11,25 @@ export default () => {
       description: 'description',
       dateAdd: new Date()
     }
-    setNotes(prevNotes => [
-      ...prevNotes,
-      data
-    ])
+    setNotes(prevNotes => {
+      localStorage.setItem('notes', JSON.stringify([...prevNotes, data]))
+      return [
+        ...prevNotes,
+        data
+      ]
+    })
+  }
+
+  const handleSorting = (e) => {
+    const sortingArray = notes.slice().sort((a, b) => {
+      const dateA = new Date(a.dateAdd)
+      const dateB = new Date(b.dateAdd)
+      const result = e.target.value === 'downSort' ? (dateB - dateA) : (dateA - dateB)
+
+      return result
+    })
+
+    setNotes(sortingArray)
   }
 
   return (
@@ -42,9 +48,9 @@ export default () => {
         </div>
         <div className='sidebar_sort'>
           Сортировать по дате
-          <select name='select'>
-            <option value='value1'>убыванию даты</option>
-            <option value='value2'>возрастанию даты</option>
+          <select name='select' onChange={(e) => handleSorting(e)}>
+            <option value='upSort'>возрастанию даты</option>
+            <option value='downSort'>убыванию даты</option>
           </select>
         </div>
         <NoteList data={notes} />
