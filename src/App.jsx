@@ -4,19 +4,20 @@ import './App.css'
 
 const App = () => {
   const [activeNote, setActiveNote] = useState({})
+  const [activeNewNote, setActiveNewNote] = useState(false)
   const [notes, setNotes] = useState(localStorage.notes ? JSON.parse(localStorage.notes) : [])
 
-  const handleNewNote = (data) => {
-    data = {
-      title: 'title',
-      description: 'description',
+  const handleNewNote = ({ newTitle, newDescription }) => {
+    const newData = {
+      title: newTitle,
+      description: newDescription,
       dateAdd: new Date()
     }
     setNotes(prevNotes => {
-      localStorage.setItem('notes', JSON.stringify([...prevNotes, data]))
+      localStorage.setItem('notes', JSON.stringify([...prevNotes, newData]))
       return [
         ...prevNotes,
-        data
+        newData
       ]
     })
   }
@@ -34,12 +35,14 @@ const App = () => {
       <Sidebar
         setActiveNote={setActiveNote}
         notes={notes}
-        handleNewNote={handleNewNote}
         setNotes={setNotes}
+        handleActiveNewNote={setActiveNewNote}
       />
       <Main
         activeNote={activeNote}
         handleDeleteNote={handleDeleteNote}
+        handleNewNote={handleNewNote}
+        activeNewNote={activeNewNote}
       />
     </div>
   )

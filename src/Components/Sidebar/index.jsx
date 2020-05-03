@@ -5,9 +5,10 @@ import './styles.css'
 export default ({
   setActiveNote,
   notes,
-  handleNewNote,
-  setNotes
+  setNotes,
+  handleActiveNewNote
 }) => {
+
   const handleSorting = (e) => {
     const sortingArray = notes.slice().sort((a, b) => {
       const dateA = new Date(a.dateAdd)
@@ -26,7 +27,7 @@ export default ({
         <div className='sidebar_button'>
           <Button
             style={{ width: '100%' }}
-            onClick={() => handleNewNote()}
+            onClick={() => handleActiveNewNote((prevState) => !prevState)}
           >
             + заметка
           </Button>
