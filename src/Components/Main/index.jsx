@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Button } from '../'
 import ButtonsList from './ButtonsList'
 import './styles.css'
 
@@ -19,11 +18,11 @@ export default (props) => {
   }
 
   const buttonsEdit = [
-    { 
+    {
       title: 'Редактировать',
       options: { disabled: !title && !description }
     },
-    { 
+    {
       title: 'Удалить',
       options: {
         disabled: !title && !description,
@@ -31,19 +30,16 @@ export default (props) => {
       }
     }
   ]
+  const buttonsSubmit = [{ title: 'ok', options: { onClick: () => handleNewNote({ newTitle, newDescription }) } }]
 
   return (
     <div className='main'>
       <div className='main_buttons'>
-        <ButtonsList config={title && description ? buttonsEdit : []} />
+        <ButtonsList config={activeNewNote ? buttonsSubmit : (title && description) ? buttonsEdit : []} />
       </div>
       <div className='main_content'>
-        <h1>{title}</h1>
-        <p>{description}</p>
-      </div>
-      {activeNewNote ? (
-        <div>
-          <form onSubmit={() => handleNewNote({ newTitle, newDescription })}>
+        {activeNewNote ? (
+          <div>
             <input
               placeholder='title'
               type='text'
@@ -58,10 +54,15 @@ export default (props) => {
               onChange={handleChange}
               value={newDescription}
             />
-            <Button type='submit'>ok</Button>
-          </form>
-        </div>
-      ) : null}
+          </div>
+        ) : (
+          <div>
+            <h1>{title}</h1>
+            <p>{description}</p>
+          </div>
+        )}
+
+      </div>
     </div>
   )
 }

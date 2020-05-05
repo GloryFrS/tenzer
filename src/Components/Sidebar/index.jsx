@@ -1,26 +1,19 @@
 import React from 'react'
-import { Button, SearchInput, NoteList } from '../'
+import {
+  Button,
+  SearchBar,
+  NoteList
+} from '../'
 import './styles.css'
 
 export default ({
   setActiveNote,
   notes,
-  setNotes,
-  handleActiveNewNote
+  handleActiveNewNote,
+  handleSearch,
+  searchNotes,
+  handleSorting
 }) => {
-
-  const handleSorting = (e) => {
-    const sortingArray = notes.slice().sort((a, b) => {
-      const dateA = new Date(a.dateAdd)
-      const dateB = new Date(b.dateAdd)
-      const result = e.target.value === 'downSort' ? (dateB - dateA) : (dateA - dateB)
-
-      return result
-    })
-
-    setNotes(sortingArray)
-  }
-
   return (
     <div className='sidebar'>
       <div className='sidebar_container'>
@@ -33,7 +26,10 @@ export default ({
           </Button>
         </div>
         <div>
-          <SearchInput />
+          <SearchBar
+            onChange={handleSearch}
+            placeholder='Поиск'
+          />
         </div>
         <div className='sidebar_sort'>
           Сортировать по дате
@@ -42,7 +38,11 @@ export default ({
             <option value='downSort'>убыванию даты</option>
           </select>
         </div>
-        <NoteList setActiveNote={setActiveNote} data={notes} />
+        <NoteList
+          setActiveNote={setActiveNote}
+          notes={notes}
+          searchNotes={searchNotes}
+        />
       </div>
     </div>
   )

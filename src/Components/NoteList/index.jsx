@@ -1,13 +1,20 @@
 import React from 'react'
 import { Note } from '../'
 
-export default ({ data, setActiveNote }) => {
-  const listNotes = data.map((note, index) => (
+export default ({
+  notes,
+  setActiveNote,
+  searchNotes
+}) => {
+  console.log(searchNotes)
+
+  const activeNotes = searchNotes || notes
+  const listNotes = activeNotes.map((note, index) => (
     <Note
       onClick={() => setActiveNote({
+        id: note.id,
         title: note.title,
-        description: note.description,
-        index
+        description: note.description
       })}
       note={note}
       key={index}
