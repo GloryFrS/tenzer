@@ -5,8 +5,19 @@ import './App.css'
 const App = () => {
   const [activeNote, setActiveNote] = useState({})
   const [activeNewNote, setActiveNewNote] = useState(false)
+  const [edit, setEdit] = useState(false)
   const [notes, setNotes] = useState(localStorage.notes ? JSON.parse(localStorage.notes) : [])
   const [searchNotes, setSearchNotes] = useState()
+
+  const handleActiveNote = (data) => {
+    if (data.title) {
+      setActiveNote(data)
+      setActiveNewNote(false)
+    } else {
+      setActiveNewNote(prevState => !prevState)
+      setEdit(false)
+    }
+  }
 
   const handleNewNote = ({ newTitle, newDescription }) => {
     const newData = {
@@ -28,11 +39,7 @@ const App = () => {
   const handleSearch = (e) => {
     const serchArr = notes.filter((note) => !note.title.search(e.target.value) || !note.description.search(e.target.value))
 
-    if (e.target.value === '') {
-      setSearchNotes(false)
-    }
-
-    setSearchNotes(serchArr)
+    if (e.target.value === '') { setSearchNotes(false) } else { setSearchNotes(serchArr) }
   }
 
   const handleSorting = (e) => {
@@ -65,22 +72,42 @@ const App = () => {
     setActiveNote({})
   }
 
+  const handleEditNote = (data) => {
+    const newArr = notes.map((note) => {
+      if (note.id === activeNote.id) {
+        return {
+          ...note,
+          title: data.editTitle,
+          description: data.editDescription
+        }
+      }
+      return note
+    })
+
+    localStorage.setItem('notes', JSON.stringify(newArr))
+    setNotes(newArr)
+    setEdit(false)
+    setActiveNote({})
+  }
+
   return (
     <div className='App'>
       <Sidebar
         setActiveNote={setActiveNote}
         notes={notes}
         handleSorting={handleSorting}
-        handleActiveNewNote={setActiveNewNote}
+        handleActiveNote={handleActiveNote}
         handleSearch={handleSearch}
         searchNotes={searchNotes}
-        setSearchNotes={setSearchNotes}
       />
       <Main
         activeNote={activeNote}
         handleDeleteNote={handleDeleteNote}
         handleNewNote={handleNewNote}
         activeNewNote={activeNewNote}
+        handleEditNote={handleEditNote}
+        edit={edit}
+        setEdit={setEdit}
       />
     </div>
   )

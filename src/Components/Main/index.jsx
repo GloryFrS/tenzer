@@ -1,26 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ButtonsList from './ButtonsList'
+import EditNote from './EditNote'
+import NewNote from './NewNote'
 import './styles.css'
 
 export default (props) => {
   const [newTitle, setNewTitle] = useState('')
   const [newDescription, setNewDescription] = useState('')
   const { title, description } = props.activeNote
+  const [editTitle, setEditTitle] = useState('')
+  const [editDescription, setEditDescription] = useState('')
   const {
     handleDeleteNote,
     handleNewNote,
-    activeNewNote
+    activeNewNote,
+    handleEditNote,
+    setEdit,
+    edit
   } = props
+
+  useEffect(() => {
+    if (title && description) {
+      setEditTitle(title)
+      setEditDescription(description)
+    }
+  }, [title, description])
 
   const handleChange = (e) => {
     if (e.target.name === 'title') { setNewTitle(e.target.value) }
     if (e.target.name === 'description') { setNewDescription(e.target.value) }
+    if (e.target.name === 'editTitle') { setEditTitle(e.target.value) }
+    if (e.target.name === 'editDescription') { setEditDescription(e.target.value) }
   }
 
-  const buttonsEdit = [
+  const buttonsView = [
     {
       title: 'Редактировать',
-      options: { disabled: !title && !description }
+      options: {
+        disabled: !title && !description,
+        onClick: () => setEdit(prevState => !prevState)
+      }
     },
     {
       title: 'Удалить',
@@ -30,38 +49,36 @@ export default (props) => {
       }
     }
   ]
-  const buttonsSubmit = [{ title: 'ok', options: { onClick: () => handleNewNote({ newTitle, newDescription }) } }]
+  const buttonsSubmit = [{ title: 'Создать заметку', options: { onClick: () => handleNewNote({ newTitle, newDescription }) } }]
+  const buttonsEdit = [
+    { title: 'Сохранить', options: { onClick: () => handleEditNote({ editTitle, editDescription }) } },
+    { title: 'Отмена', options: { onClick: () => setEdit(prevState => !prevState) } }
+  ]
 
   return (
     <div className='main'>
       <div className='main_buttons'>
-        <ButtonsList config={activeNewNote ? buttonsSubmit : (title && description) ? buttonsEdit : []} />
+        <ButtonsList config={activeNewNote ? buttonsSubmit : edit ? buttonsEdit : (title && description) ? buttonsView : []} />
       </div>
       <div className='main_content'>
-        {activeNewNote ? (
-          <div>
-            <input
-              placeholder='title'
-              type='text'
-              name='title'
-              onChange={handleChange}
-              value={newTitle}
-            />
-            <input
-              placeholder='description'
-              type='text'
-              name='description'
-              onChange={handleChange}
-              value={newDescription}
-            />
-          </div>
-        ) : (
+        <EditNote
+          edit={edit}
+          title={editTitle}
+          description={editDescription}
+          handleChange={handleChange}
+        />
+        <NewNote
+          activeNewNote={activeNewNote}
+          handleChange={handleChange}
+          newTitle={newTitle}
+          newDescription={newDescription}
+        />
+        {!activeNewNote && !edit ? (
           <div>
             <h1>{title}</h1>
             <p>{description}</p>
           </div>
-        )}
-
+        ) : null}
       </div>
     </div>
   )

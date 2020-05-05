@@ -7,9 +7,8 @@ import {
 import './styles.css'
 
 export default ({
-  setActiveNote,
   notes,
-  handleActiveNewNote,
+  handleActiveNote,
   handleSearch,
   searchNotes,
   handleSorting
@@ -20,7 +19,7 @@ export default ({
         <div className='sidebar_button'>
           <Button
             style={{ width: '100%' }}
-            onClick={() => handleActiveNewNote((prevState) => !prevState)}
+            onClick={handleActiveNote}
           >
             + заметка
           </Button>
@@ -39,7 +38,7 @@ export default ({
           </select>
         </div>
         <NoteList
-          setActiveNote={setActiveNote}
+          handleActiveNote={handleActiveNote}
           notes={notes}
           searchNotes={searchNotes}
         />

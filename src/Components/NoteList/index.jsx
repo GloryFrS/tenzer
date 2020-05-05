@@ -3,15 +3,13 @@ import { Note } from '../'
 
 export default ({
   notes,
-  setActiveNote,
-  searchNotes
+  searchNotes,
+  handleActiveNote
 }) => {
-  console.log(searchNotes)
-
   const activeNotes = searchNotes || notes
   const listNotes = activeNotes.map((note, index) => (
     <Note
-      onClick={() => setActiveNote({
+      onClick={() => handleActiveNote({
         id: note.id,
         title: note.title,
         description: note.description
@@ -23,6 +21,7 @@ export default ({
 
   return (
     <>
+      <p>{searchNotes && !searchNotes.length ? 'Ничего не найденно' : searchNotes ? 'Результаты поиска' : ''}</p>
       {listNotes}
     </>
   )
