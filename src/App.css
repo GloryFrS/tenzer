@@ -3,3 +3,10 @@
   color: #ffffff;
   background: #252c48;
 }
+
+:root {
+  --main-bg-color: #1b203a;
+  --sidebar-bg-color: #252c48;
+  --button-bg-color: #e0e0e0;
+  --button-color: #000;
+}

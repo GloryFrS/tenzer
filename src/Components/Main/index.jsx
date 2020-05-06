@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ButtonsList from './ButtonsList'
-import EditNote from './EditNote'
-import NewNote from './NewNote'
+import Content from './Content'
 import './styles.css'
 
 export default (props) => {
@@ -61,15 +60,12 @@ export default (props) => {
         <ButtonsList config={activeNewNote ? buttonsSubmit : edit ? buttonsEdit : (title && description) ? buttonsView : []} />
       </div>
       <div className='main_content'>
-        <EditNote
+        <Content
           edit={edit}
           title={editTitle}
           description={editDescription}
           handleChange={handleChange}
-        />
-        <NewNote
           activeNewNote={activeNewNote}
-          handleChange={handleChange}
           newTitle={newTitle}
           newDescription={newDescription}
         />

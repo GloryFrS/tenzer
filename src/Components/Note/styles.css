@@ -1,7 +1,7 @@
 .noteBlock {
   border: 1px solid #6e6e6e;
   padding: 1em;
-  background: #1b203a;
+  background: var(--main-bg-color);
   margin: 1em 0;
   cursor: pointer;
   border-radius: 5px;

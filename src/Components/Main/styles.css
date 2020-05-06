@@ -1,6 +1,6 @@
 .main {
-  flex-basis: 60vw;
-  background: #1b203a;
+  flex: 2;
+  background: var(--main-bg-color);
   height: 100vh;
 }
 .main_buttons {
@@ -14,7 +14,7 @@
 
 .main_content__input {
   border: 0;
-  background: #1b203a;
+  background: var(--main-bg-color);
   color: #fff;
   font-size: 18px;
   border-bottom: 1px solid;
