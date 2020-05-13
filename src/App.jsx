@@ -37,7 +37,9 @@ const App = () => {
   }
 
   const handleSearch = (e) => {
-    const serchArr = notes.filter((note) => !note.title.search(e.target.value) || !note.description.search(e.target.value))
+    const serchArr = notes.filter((note) => {
+      return !note.title.toLowerCase().search(e.target.value.toLowerCase()) || !note.description.search(e.target.value)
+    })
 
     if (e.target.value === '') { setSearchNotes(false) } else { setSearchNotes(serchArr) }
   }
