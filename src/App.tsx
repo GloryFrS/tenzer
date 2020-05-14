@@ -1,5 +1,5 @@
 import React, { useState, FunctionComponent } from 'react'
-import { Main, Sidebar } from './Components'
+import { Main, Sidebar } from './components'
 import './App.css'
 
 export interface Note {
@@ -19,7 +19,7 @@ interface EventTargetValue {
 }
 
 
-const App : FunctionComponent = () => {
+const App : FunctionComponent = (props: any) => {
   const [activeNote, setActiveNote] = useState<Note>({
     id: NaN,
     title: '',
