@@ -1,15 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, FunctionComponent } from 'react'
 import { Main, Sidebar } from './Components'
 import './App.css'
 
-const App = () => {
-  const [activeNote, setActiveNote] = useState({})
+export interface Note {
+  id: Number,
+  title: string,
+  description: string,
+  dateAdd: Date
+}
+
+export interface NewNote {
+  newTitle: string,
+  newDescription: string
+}
+
+interface EventTargetValue {
+  target: { value: string }
+}
+
+
+const App : FunctionComponent = () => {
+  const [activeNote, setActiveNote] = useState<Note>({
+    id: NaN,
+    title: '',
+    description: '',
+    dateAdd: new Date()
+  })
   const [activeNewNote, setActiveNewNote] = useState(false)
   const [edit, setEdit] = useState(false)
   const [notes, setNotes] = useState(localStorage.notes ? JSON.parse(localStorage.notes) : [])
-  const [searchNotes, setSearchNotes] = useState()
+  const [searchNotes, setSearchNotes] = useState<any>()
 
-  const handleActiveNote = (data) => {
+  const handleActiveNote = (data: Note) => {
     if (data.title) {
       setActiveNote(data)
       setActiveNewNote(false)
@@ -19,14 +41,14 @@ const App = () => {
     }
   }
 
-  const handleNewNote = ({ newTitle, newDescription }) => {
+  const handleNewNote = ({ newTitle, newDescription } : NewNote) => {
     const newData = {
       id: Math.floor(Math.random() * Math.floor(9999999999)),
       title: newTitle,
       description: newDescription,
       dateAdd: new Date()
     }
-    setNotes(prevNotes => {
+    setNotes((prevNotes: any) => {
       localStorage.setItem('notes', JSON.stringify([...prevNotes, newData]))
       return [
         ...prevNotes,
@@ -36,19 +58,19 @@ const App = () => {
     setSearchNotes(false)
   }
 
-  const handleSearch = (e) => {
-    const serchArr = notes.filter((note) => {
+  const handleSearch = (e: EventTargetValue) => {
+    const serchArr = notes.filter((note: Note) => {
       return !note.title.toLowerCase().search(e.target.value.toLowerCase()) || !note.description.search(e.target.value)
     })
 
     if (e.target.value === '') { setSearchNotes(false) } else { setSearchNotes(serchArr) }
   }
 
-  const handleSorting = (e) => {
+  const handleSorting = (e: EventTargetValue) => {
     const sortingArray = searchNotes || notes
-    const sortingResult = sortingArray.slice().sort((a, b) => {
-      const dateA = new Date(a.dateAdd)
-      const dateB = new Date(b.dateAdd)
+    const sortingResult = sortingArray.slice().sort((a: Note, b: Note) => {
+      const dateA: any = new Date(a.dateAdd)
+      const dateB: any = new Date(b.dateAdd)
       const result = e.target.value === 'downSort' ? (dateB - dateA) : (dateA - dateB)
 
       return result
@@ -62,20 +84,25 @@ const App = () => {
   }
 
   const handleDeleteNote = () => {
-    const newArr = notes.filter((note) => note.id !== activeNote.id)
+    const newArr = notes.filter((note: Note) => note.id !== activeNote.id)
 
     localStorage.notes = JSON.stringify(newArr)
 
     if (searchNotes) {
-      setSearchNotes(searchNotes.filter((note) => note.id !== activeNote.id))
+      setSearchNotes(searchNotes.filter((note: Note) => note.id !== activeNote.id))
     }
 
     setNotes(newArr)
-    setActiveNote({})
+    setActiveNote({
+      id: NaN,
+      title: '',
+      description: '',
+      dateAdd: new Date()
+    })
   }
 
-  const handleEditNote = (data) => {
-    const newArr = notes.map((note) => {
+  const handleEditNote = (data: { editTitle: string; editDescription: string }) => {
+    const newArr = notes.map((note: Note) => {
       if (note.id === activeNote.id) {
         return {
           ...note,
@@ -89,13 +116,17 @@ const App = () => {
     localStorage.setItem('notes', JSON.stringify(newArr))
     setNotes(newArr)
     setEdit(false)
-    setActiveNote({})
+    setActiveNote({
+      id: NaN,
+      title: '',
+      description: '',
+      dateAdd: new Date()
+    })
   }
 
   return (
     <div className='App'>
       <Sidebar
-        setActiveNote={setActiveNote}
         notes={notes}
         handleSorting={handleSorting}
         handleActiveNote={handleActiveNote}

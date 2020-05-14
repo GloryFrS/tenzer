@@ -1,5 +1,15 @@
 import React from 'react'
-import { Input } from '../'
+import { Input } from '..'
+
+interface Props {
+  activeNewNote: Boolean,
+  edit: () => any,
+  handleChange: () => any
+  title: string,
+  description: string,
+  newTitle: string,
+  newDescription: string
+}
 
 export default ({
   activeNewNote,
@@ -9,7 +19,7 @@ export default ({
   handleChange,
   newTitle,
   newDescription
-}) => {
+}: Props) => {
   if (!activeNewNote && !edit) { return null }
 
   return (
